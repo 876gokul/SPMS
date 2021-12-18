@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace SoftwareProjectManagementSystem.MyModels
+namespace SoftwareProjectManagementSystem.Models
 {
     public partial class testContext : DbContext
     {
@@ -22,7 +22,6 @@ namespace SoftwareProjectManagementSystem.MyModels
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public object MyModles { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +83,12 @@ namespace SoftwareProjectManagementSystem.MyModels
                     .HasForeignKey(d => d.CreatedBy)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Projects_Users");
+
+                entity.HasOne(d => d.CreatedForNavigation)
+                    .WithMany(p => p.Projects)
+                    .HasForeignKey(d => d.CreatedFor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Projects_Clients");
             });
 
             modelBuilder.Entity<Role>(entity =>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SoftwareProjectManagementSystem.MyModels
+namespace SoftwareProjectManagementSystem.Models
 {
     public partial class Project
     {
@@ -21,6 +21,7 @@ namespace SoftwareProjectManagementSystem.MyModels
         public int CreatedFor { get; set; }
 
         public virtual User CreatedByNavigation { get; set; }
+        public virtual Client CreatedForNavigation { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
     }
 }

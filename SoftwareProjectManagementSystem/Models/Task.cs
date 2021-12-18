@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace SoftwareProjectManagementSystem.MyModels
+namespace SoftwareProjectManagementSystem.Models
 {
     public partial class Task
     {

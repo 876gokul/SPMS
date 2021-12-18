@@ -1,10 +1,6 @@
 ﻿using SoftwareProjectManagementSystem.Models;
-using SoftwareProjectManagementSystem.MyModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Task = SoftwareProjectManagementSystem.MyModels.Task;
+using Task = SoftwareProjectManagementSystem.Models.Task;
 
 namespace SoftwareProjectManagementSystem.Data
 {
@@ -21,6 +17,8 @@ namespace SoftwareProjectManagementSystem.Data
             this.userData = userData;
             this.clientData = clientData;
             this.roleData = roleData;
+            this.taskData = taskData;
+            //mapping role to user
             foreach (var user in userData)
             {
                 user.Projects = projectData;
@@ -33,6 +31,7 @@ namespace SoftwareProjectManagementSystem.Data
                     }
                 }
             }
+            //mapping users to task
             foreach (var task in taskData)
             {
                 foreach(var user in userData)
@@ -47,6 +46,7 @@ namespace SoftwareProjectManagementSystem.Data
                     }                
                 }
             }
+            //mapping project to task
             foreach (var task in taskData)
             {
                 foreach(var project in projectData)
@@ -57,6 +57,7 @@ namespace SoftwareProjectManagementSystem.Data
                     }             
                 }
             }
+            //mapping user to project
             foreach (var project in projectData)
             {
                 foreach (var user in userData)
@@ -64,6 +65,17 @@ namespace SoftwareProjectManagementSystem.Data
                     if(project.CreatedBy == user.Id)
                     {
                         project.CreatedByNavigation = user;
+                    }
+                }
+            }
+            //mapping client to project
+            foreach (var project in projectData)
+            {
+                foreach (var client in clientData)
+                {
+                    if(project.CreatedBy == client.Id)
+                    {
+                        project.CreatedForNavigation = client;
                     }
                 }
             }

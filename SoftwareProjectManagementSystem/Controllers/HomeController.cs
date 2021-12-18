@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using SoftwareProjectManagementSystem.Models;
-using SoftwareProjectManagementSystem.MyModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

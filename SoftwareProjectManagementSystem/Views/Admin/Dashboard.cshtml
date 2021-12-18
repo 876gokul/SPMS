@@ -10,7 +10,7 @@
     <div class="d-flex">
         <div class="btn btn-lg btn-success">Add a New User</div>
     </div>
-    <table class="table table-secondary table-striped w-100 mt-3 mb-0">
+    <table class="table table-hover table-secondary table-striped w-100 mt-3 mb-0 table-responsive">
         <thead>
 
             <tr>
@@ -31,9 +31,144 @@
                     <td>@user.Email</td>
                     <td>@user.EmployeeId</td>
                     <td>
-                        <a href="#" class="btn btn-primary">details</a>
-                        <a href="#" class="btn btn-warning">edit</a>
-                        <a href="#" class="btn btn-danger">delete</a>
+                        <a href="#" class="btn btn-primary" >details</a>
+                        <a href="#" class="btn btn-warning" >edit</a>
+                        <a href="#" class="btn btn-danger" >delete</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+<div class="container text-secondary">
+    <div class="display-4 py-2">
+        Manage Projects
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div class="btn btn-lg btn-success">Add a New Project</div>
+    </div>
+    <table class="table table-warning table-striped w-100 mt-3 mb-0 table-responsive">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Data</th>
+                <th>End Data</th>
+                <th>Created By</th>
+                <th>Created for</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model.projectData)
+            {
+
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Descrption.ToString().Substring(0,25)....</td>
+                    <td>@project.StartDate.ToString().Substring(0,10)</td>
+                    <td>@project.EndDate</td>
+                    <td>@project.CreatedByNavigation.Name</td>
+                    <td>@project.CreatedForNavigation.Name</td>
+                    
+                    <td>
+                        <a href="#" class="btn btn-primary" >details</a>
+                        <a href="#" class="btn btn-warning" >edit</a>
+                        <a href="#" class="btn btn-danger" >delete</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+<div class="container text-secondary">
+    <div class="display-4 py-2">
+        Manage Tasks
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div class="btn btn-lg btn-success">Add a New Project</div>
+    </div>
+    <table class="table table-hover table-primary table-striped w-100 mt-3 mb-0 table-responsive">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Project Name</th>
+                <th>Created By</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.taskData)
+            {
+
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@task.Descrption.ToString().Substring(0, 25)...</td>
+                    <td>@task.Priority</td>
+                    <td>@task.ProjectNavigation.Name</td>
+                    <td>@task.CreatedByNavigation.Name</td>
+                    <td>@task.AssignedToNavigation.Name</td>
+                    <td>@task.Status</td>
+
+                    <td>
+                        <a href="#" class="btn btn-primary" >details</a>
+                        <a href="#" class="btn btn-warning " >edit</a>
+                        <a href="#" class="btn btn-danger " >delete</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+<div class="container text-secondary">
+    <div class="display-4 py-2">
+        Manage Clients
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div class="btn btn-lg btn-success">Add a New Project</div>
+    </div>
+    <table class="table table-hover table-primary table-striped w-100 mt-3 mb-0 table-responsive">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>Company Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model.clientData)
+            {
+
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.CompanyName</td>
+                    <td>@client.Address</td>
+                    <td>@client.Phone</td>
+                    <td>
+                        <a href="#" class="btn btn-primary" >details</a>
+                        <a href="#" class="btn btn-warning " >edit</a>
+                        <a href="#" class="btn btn-danger " >delete</a>
                     </td>
 
                 </tr>

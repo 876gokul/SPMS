@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SoftwareProjectManagementSystem.Data;
 using SoftwareProjectManagementSystem.Models;
-using SoftwareProjectManagementSystem.MyModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Task = SoftwareProjectManagementSystem.MyModels.Task;
+using Task = SoftwareProjectManagementSystem.Models.Task;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
