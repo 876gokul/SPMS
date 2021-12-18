@@ -1,0 +1,45 @@
+﻿@model SoftwareProjectManagementSystem.Data.DashBoardData
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="container text-secondary">
+    <div class="display-4 py-2">
+        Manage Users
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div class="btn btn-lg btn-success">Add a New User</div>
+    </div>
+    <table class="table table-secondary table-striped w-100 mt-3 mb-0">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>EmployeeId</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.userData)
+            {
+
+                <tr>
+                    <td>@user.Name</td>
+                    @*<td>@user.RoleNavigation.Role1</td>*@
+                    <td>@user.Email</td>
+                    <td>@user.EmployeeId</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">details</a>
+                        <a href="#" class="btn btn-warning">edit</a>
+                        <a href="#" class="btn btn-danger">delete</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>

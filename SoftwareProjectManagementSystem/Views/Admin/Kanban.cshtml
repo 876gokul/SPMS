@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Kanban";
+}
+<div class="container py-3">
+    <div class="display-4 text-center">Kanban</div>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        Todo
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowDrop(event)" id="list3">
+                            
+                            <div class="card w-100 rounded" draggable="true" ondragstart="drag(event)"
+                                 id="5">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <div class="lead">Title</div>
+                                    <i class=" btn bi bi-justify"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-text">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit,
+                                    </div>
+                                    <p class="card-text mt-2">
+                                        <small class="text-muted">
+                                            Assigned by:
+                                            Dave
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer w-100">
+                        <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal"
+                           data-bs-target="#exampleModal">
+                            Add
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        In Progress
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3 w-100" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowDrop(event)" id="list1">
+
+                        </div>
+                    </div>
+                    <div class="card-footer w-100">
+                        <a href="#" class="btn btn-outline-primary">
+                            Add
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        Done
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowDrop(event)" id="list2">
+                            <div class="card w-100 rounded" draggable="true" ondragstart="drag(event)"
+                                 id="10">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <div class="lead">Title</div>
+                                    <i class=" btn bi bi-justify"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-text">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit,
+                                    </div>
+                                    <p class="card-text mt-2">
+                                        <small class="text-muted">
+                                            Assigned by:
+                                            Dave
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer w-100">
+                        <a href="#" class="btn btn-outline-primary">
+                            Add
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="modal fade w-100" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
