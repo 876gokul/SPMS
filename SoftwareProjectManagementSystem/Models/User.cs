@@ -27,5 +27,7 @@ namespace SoftwareProjectManagementSystem.MyModels
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<Task> TaskAssignedToNavigations { get; set; }
         public virtual ICollection<Task> TaskCreatedByNavigations { get; set; }
+
+
     }
 }

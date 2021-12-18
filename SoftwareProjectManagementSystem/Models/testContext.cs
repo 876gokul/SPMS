@@ -22,6 +22,7 @@ namespace SoftwareProjectManagementSystem.MyModels
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public object MyModles { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

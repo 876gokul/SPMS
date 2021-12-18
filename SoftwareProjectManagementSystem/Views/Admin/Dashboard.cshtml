@@ -1,4 +1,4 @@
-﻿@model SoftwareProjectManagementSystem.Data.DashBoardData
+﻿@model SoftwareProjectManagementSystem.Data.DashBoardUserData
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -27,7 +27,7 @@
 
                 <tr>
                     <td>@user.Name</td>
-                    @*<td>@user.RoleNavigation.Role1</td>*@
+                    <td>@user.RoleNavigation.Role1</td>
                     <td>@user.Email</td>
                     <td>@user.EmployeeId</td>
                     <td>

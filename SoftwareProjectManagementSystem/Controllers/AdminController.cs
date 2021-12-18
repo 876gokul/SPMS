@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Task = SoftwareProjectManagementSystem.MyModels.Task;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
@@ -23,10 +24,12 @@ namespace SoftwareProjectManagementSystem.Controllers
         public IActionResult Dashboard()
         {
             
-            IEnumerable<Project> projectData = db.Projects;
-            IEnumerable<User> userData = db.Users;
-            IEnumerable<Client> clientData = db.Clients;
-            DashBoardData FinalData = new DashBoardData(projectData, userData, clientData);
+            List<Project> projectData = db.Projects.ToList();
+            List<User> userData = db.Users.ToList();
+            List<Client> clientData = db.Clients.ToList();
+            List<Role> roleData = db.Roles.ToList();
+            List<Task> taskData = db.Tasks.ToList();
+            DashBoardUserData FinalData = new DashBoardUserData(projectData, userData, clientData,roleData,taskData);
             return View(FinalData);
         }
         public IActionResult Kanban()
