@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function navClick() {
+    $("#expand").toggleClass("d-none")
+    $("#side").toggleClass("d-none")
+}
 
-// Write your JavaScript code.
+function drop(ev, el) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    el.appendChild(document.getElementById(data));
+}
+
+function allowdrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+

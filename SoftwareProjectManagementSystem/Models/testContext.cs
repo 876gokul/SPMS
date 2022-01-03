@@ -18,8 +18,10 @@ namespace SoftwareProjectManagementSystem.Models
         }
 
         public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -29,40 +31,57 @@ namespace SoftwareProjectManagementSystem.Models
 
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
+                    .IsUnicode(false)
                     .HasColumnName("address");
 
-                entity.Property(e => e.CompanyName).HasColumnName("company name");
+                entity.Property(e => e.CompanyName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("company name");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .HasColumnName("name")
-                    .IsFixedLength(true);
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(10)
-                    .HasColumnName("phone")
-                    .IsFixedLength(true);
+                    .IsUnicode(false)
+                    .HasColumnName("phone");
+            });
+
+            modelBuilder.Entity<Priority>(entity =>
+            {
+                entity.ToTable("Priority");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<Project>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created by");
 
                 entity.Property(e => e.CreatedFor).HasColumnName("created for");
 
-                entity.Property(e => e.Descrption).HasColumnName("descrption");
+                entity.Property(e => e.Descrption)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("descrption");
 
                 entity.Property(e => e.EndDate)
                     .HasColumnType("date")
@@ -70,9 +89,11 @@ namespace SoftwareProjectManagementSystem.Models
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .HasColumnName("name")
-                    .IsFixedLength(true);
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.PlannedAmount).HasColumnName("planned amount");
 
                 entity.Property(e => e.StartDate)
                     .HasColumnType("date")
@@ -93,33 +114,48 @@ namespace SoftwareProjectManagementSystem.Models
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Role1)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("role");
+            });
+
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.ToTable("Status");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<Task>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.AssignedTo).HasColumnName("assigned to");
 
+                entity.Property(e => e.Cost).HasColumnName("cost");
+
                 entity.Property(e => e.CreatedBy).HasColumnName("created by");
 
-                entity.Property(e => e.Descrption).HasColumnName("descrption");
+                entity.Property(e => e.Descrption)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("descrption");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(32)
-                    .HasColumnName("name")
-                    .IsFixedLength(true);
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
 
                 entity.Property(e => e.Priority).HasColumnName("priority");
 
@@ -139,44 +175,60 @@ namespace SoftwareProjectManagementSystem.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Tasks_Users");
 
+                entity.HasOne(d => d.PriorityNavigation)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(d => d.Priority)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tasks_Priority");
+
                 entity.HasOne(d => d.ProjectNavigation)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.Project)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Tasks_Projects");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(d => d.Status)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tasks_Status");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DateOfBirth)
                     .HasColumnType("date")
                     .HasColumnName("date of birth");
 
-                entity.Property(e => e.Email).HasColumnName("email");
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("email");
 
                 entity.Property(e => e.EmployeeId)
                     .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("employee id")
-                    .IsFixedLength(true);
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("employee id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(64)
-                    .HasColumnName("name")
-                    .IsFixedLength(true);
+                    .IsUnicode(false)
+                    .HasColumnName("name");
 
-                entity.Property(e => e.Password).HasColumnName("password");
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasColumnName("password");
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(10)
-                    .HasColumnName("phone")
-                    .IsFixedLength(true);
+                    .IsUnicode(false)
+                    .HasColumnName("phone");
 
                 entity.Property(e => e.Role).HasColumnName("role");
 

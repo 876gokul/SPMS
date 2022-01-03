@@ -1,0 +1,56 @@
+﻿@model SoftwareProjectManagementSystem.Models.User
+@{
+    ViewData["Title"] = "Delete User";
+}
+<div class="container">
+    <form asp-action="Delete" method="post">
+        <div class="card col-12 col-sm-6 col-md-6 mt-3 mx-auto">
+            <div class="card-title text-center">
+                <h4>Delete User</h4>
+            </div>
+            <div class="card-body">
+
+                <input type="hidden" asp-for="Id">
+                <div class="form-group mb-3">
+                    <label asp-for="Name">
+                    </label>
+                    <input disabled asp-for="Name" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Name"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="EmployeeId">
+                    </label>
+                    <input disabled asp-for="EmployeeId" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="EmployeeId"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Email">
+                    </label>
+                    <input disabled asp-for="Email" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Email"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Phone">
+                    </label>
+                    <input disabled asp-for="Phone" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Phone"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="DateOfBirth">
+                    </label>
+                    <input disabled asp-for="DateOfBirth" class="form-control" type="date">
+                    <small><span class="text-danger" asp-validation-for="DateOfBirth"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Role"></label>
+                    <select asp-for="Role" asp-items="ViewBag.Roles" disabled></select>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back to Users</a>
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </div>
+        </div>
+    </form>
+
+</div>

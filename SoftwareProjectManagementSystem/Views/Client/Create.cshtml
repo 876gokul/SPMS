@@ -1,0 +1,59 @@
+﻿@model SoftwareProjectManagementSystem.Models.Client
+@{
+    ViewData["Title"] = "Create a Client";
+}
+<div class="container">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <a class="no-underline text-secondary display-4 d-inline col-12 text-center" asp-controller="Admin" asp-action="Clients">
+                Manage Clients
+            </a>
+        </div>
+    </div>
+    <hr>
+    <form asp-action="Create" method="post">
+        <div class="card col-12 col-sm-6 col-md-6 mt-3 mx-auto">
+            <div class="card-title text-center pt-3">
+                <h4>Create a Client</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group mb-3">
+                    <label asp-for="CompanyName">
+                    </label>
+                    <input asp-for="CompanyName" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="CompanyName"></span></small>
+
+                </div>
+                <div class="form-group mb-3">
+
+                    <label asp-for="Name">
+                    </label>
+                    <input asp-for="Name" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Name"></span></small>
+                </div>
+                <div class="form-group mb-3">
+
+                    <label asp-for="Address">
+                    </label>
+                    <input asp-for="Address" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Address"></span></small>
+
+                </div>
+                <div class="form-group mb-3">
+
+                    <label asp-for="Phone">
+                    </label>
+                    <input asp-for="Phone" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Phone"></span></small>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back to Clients</a>
+                <button type="submit" class="btn btn-outline-secondary">Create a Client</button>
+            </div>
+        </div>
+    </form>
+
+</div>

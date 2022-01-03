@@ -1,0 +1,59 @@
+﻿@model SoftwareProjectManagementSystem.Models.Task
+@{
+    ViewData["Title"] = "Create Tasks";
+}
+<div class="container">
+    <form asp-action="Create" method="post">
+        <div class="card col-12 col-sm-6 col-md-6 mt-3 mx-auto">
+            <div class="card-title text-center pt-3">
+                <h4>Create Task</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group mb-3">
+                    <label asp-for="Name">
+                    </label>
+                    <input asp-for="Name" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Name"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Descrption">
+                    </label>
+                    <input asp-for="Descrption" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Descrption"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Project"></label>
+                    <select asp-for="Project" asp-items="ViewBag.Project"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Priority"></label>
+                    <select asp-for="Priority" asp-items="ViewBag.Priority"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Status"></label>
+                    <select asp-for="Status" asp-items="ViewBag.Status"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="AssignedTo"></label>
+                    <select asp-for="AssignedTo" asp-items="ViewBag.AssignedTo"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="CreatedBy"></label>
+                    <select asp-for="CreatedBy" asp-items="ViewBag.CreatedBy"></select>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Cost">
+                    </label>
+                    <input asp-for="Cost" class="form-control" type="number" step="0.01">
+                    <small><span class="text-danger" asp-validation-for="Cost"></span></small>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back to Task</a>
+                <button type="submit" class="btn btn-outline-dark">Create Task</button>
+            </div>
+        </div>
+    </form>
+
+</div>

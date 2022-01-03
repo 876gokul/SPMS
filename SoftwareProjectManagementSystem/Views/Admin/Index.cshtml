@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body text-center text-sm-start">
-                        <h5 class="card-title">Role</h5>
+                        <h5 class="card-title">Role: @ViewBag.User</h5>
                         <hr>
                         <p class="card-text">email : <span>876gokul@gmail.com</span></p>
                         <p class="card-text">phone : <span>80720 22640</span></p>
@@ -22,6 +22,16 @@
             </div>
         </div>
         <hr>
+        @{
+            var currentUser = ViewBag.user;
+            foreach (var item in currentUser.Claims)
+            {
+                <p>@item</p>
+            }
+            @currentUser.IsInRole("Developer");
+            @currentUser.IsInRole("Admin");
+            @currentUser.IsInRole("Tester");
+        }
         <div class="col-12 d-flex align-items-center justify-content-start">
             <i class="fs-1 bi bi-arrow-right-circle text-dark mt-3">
                 <a asp-controller="Admin" asp-action="Dashboard" class="btn ">Dashboard</a>

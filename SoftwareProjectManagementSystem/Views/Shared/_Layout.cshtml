@@ -14,21 +14,8 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script>
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-        }
-
-        function drop(ev, el) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            el.appendChild(document.getElementById(data));
-        }
-    </script>
+    <script src="~/js/site.js"></script>
+    <link rel="stylesheet" href="~/css/site.css">
 </head>
 
 <body class="d-flex">
@@ -36,37 +23,62 @@
     <!-- side navbar -->
     <nav class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark m-0" style="width: 280px; min-height: 100vh;"
          id="side">
-        <div class="d-flex align-items-center w-100 justify-content-between">
-            <span class="fs-4">Go To</span>
-            <button class="btn" id="hide" onclick="navClick()">
-                <i class="fs-1 bi bi-arrow-left-circle text-white"></i>
-            </button>
+        <div class="sticky-top">
+            <div class="d-flex align-items-center w-100 justify-content-between">
+                <span class="fs-4">Go To</span>
+                <button class="btn" id="hide" onclick="navClick()">
+                    <i class="fs-1 bi bi-arrow-left-circle text-white"></i>
+                </button>
+            </div>
+            <hr class="sticky-top">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a asp-controller="Admin" asp-action="Index" class="nav-link text-white" aria-current="page">
+                        <i class="bi bi-house-door"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Client" asp-action="Index" class="nav-link text-white" aria-current="page">
+                        <i class="bi bi-person-lines-fill"></i>
+                        Manage Clients
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="User" asp-action="Index" class="nav-link text-white" aria-current="page">
+                        <i class="bi bi-people"></i>
+                        Manage Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Project" asp-action="Index" class="nav-link text-white" aria-current="page">
+                        <i class="bi bi-box"></i>
+                        Manage Projects
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Task" asp-action="Index" class="nav-link text-white" aria-current="page">
+                        <i class="bi bi-briefcase"></i>
+                        Manage Tasks
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Admin" asp-action="Kanban" class="nav-link text-white">
+                        <i class="bi bi-clipboard-check"></i>
+                        Kanban
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Account" asp-action="Logout" class="nav-link text-white">
+                        <i class="bi bi-key"></i>
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+            <hr>
 
         </div>
-        <hr class="sticky-top">
-        <ul class="nav nav-pills flex-column mb-auto sticky-top">
-            <li class="nav-item">
-                <a asp-controller="Admin" asp-action="Index" class="nav-link text-white" aria-current="page">
-                    <i class="bi bi-house-door-fill"></i>
-                    Home
-                </a>
-            </li>
-            <li>
-                <a asp-controller="Admin" asp-action="Dashboard" class="nav-link text-white">
-                    <i class="bi bi-grid-3x3"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a asp-controller="Admin" asp-action="Kanban" class="nav-link text-white">
-                    <i class="bi bi-clipboard-check"></i>
-                    Kanban
-                </a>
-            </li>
-
-        </ul>
-        <hr>
-
     </nav>
     <div class="d-none btn mt-3 pt-2" id="expand" onclick="navClick()">
         <i class="fs-1 bi bi-arrow-right-circle text-dark mt-3"></i>
@@ -86,15 +98,8 @@
             crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-            $('.nav.nav-pills.flex-column.mb-auto.sticky-top').find('[href="' + window.location.pathname + '"]').addClass('active')
+            $('.nav.nav-pills.flex-column.mb-auto').find('[href="' + window.location.pathname + '"]').addClass('active')
         });
-        
-        function navClick() {
-            $(document).ready(function () {
-                $("#expand").toggleClass("d-none")
-                $("#side").toggleClass("d-none")
-            });
-        }
     </script>
 </body>
 

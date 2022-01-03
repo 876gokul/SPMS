@@ -1,0 +1,62 @@
+﻿@model SoftwareProjectManagementSystem.Models.User
+@{
+    ViewData["Title"] = "Update User Details";
+}
+<div class="container">
+    <form asp-action="Edit" method="post">
+        <div class="card col-12 col-sm-6 col-md-6 mt-3 mx-auto">
+            <div class="card-title text-center pt-3">
+                <h4>Edit Details</h4>
+            </div>
+            <div class="card-body">
+
+                <input type="hidden" asp-for="Id">
+                <div class="form-group mb-3">
+                    <label asp-for="Name">
+                    </label>
+                    <input asp-for="Name" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Name"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="EmployeeId">
+                    </label>
+                    <input asp-for="EmployeeId" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="EmployeeId"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Email">
+                    </label>
+                    <input asp-for="Email" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Email"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Phone">
+                    </label>
+                    <input asp-for="Phone" class="form-control">
+                    <small><span class="text-danger" asp-validation-for="Phone"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="DateOfBirth">
+                    </label>
+                    <input asp-for="DateOfBirth" class="form-control" type="date">
+                    <small><span class="text-danger" asp-validation-for="DateOfBirth"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Password">
+                    </label>
+                    <input asp-for="Password" class="form-control"  value="" type="password">
+                    <small><span class="text-danger" asp-validation-for="Password"></span></small>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Role"></label>
+                    <select asp-for="Role" asp-items="ViewBag.Roles"></select>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back to Users</a>
+                <button type="submit" class="btn btn-outline-dark">Edit</button>
+            </div>
+        </div>
+    </form>
+
+</div>

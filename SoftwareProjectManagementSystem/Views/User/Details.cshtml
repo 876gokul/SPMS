@@ -1,0 +1,32 @@
+﻿@model SoftwareProjectManagementSystem.Models.User
+@{
+    ViewData["Title"] = "User Details";
+}
+<div class="container">
+    <div class="card col-12 col-sm-6 col-md-4 mt-3">
+        <div class="card-header">
+            <h5 class="modal-title" id="ClientModelLabel">Details of <span>@Model.EmployeeId</span></h5>
+        </div>
+        <div class="card-body">
+            @{
+                <div class="cardtext h4">
+                    <strong>Name : </strong> <span>@Model.Name</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Email : </strong> <span>@Model.Email</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Contact Phone : </strong> <span>@Model.Phone</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Date of Birth : </strong> <span>@Model.DateOfBirth.ToShortDateString()</span>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-primary" asp-action="Index">Back To Users</a>
+            <a asp-action="EditClient" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit</a>
+        </div>
+    </div>
+
+</div>
