@@ -1,38 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoftwareProjectManagementSystem.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Task = SoftwareProjectManagementSystem.Models.Task;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
+    [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Project Manager,Team Leader")]
     public class ProjectController : Controller
     {
         private readonly testContext db;
-        public ProjectController(testContext db)
+        void chartdata(Project project)
         {
-            this.db = db;
-        }
-        
-        // GET: Projects
-        public async Task<IActionResult> Index(int pageNumber = 1)
-        {
-            var projects = db.Projects.Include("CreatedByNavigation").Include("CreatedForNavigation");
-            return View(await PagingList<Project>.CreateAsync(projects, pageNumber, 4));
-        }
-        // GET: Project/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await db.Projects.Include("CreatedByNavigation").Include("CreatedForNavigation").Include("Tasks")
-                .FirstOrDefaultAsync(m => m.Id == id);
             ViewBag.todo = project.Tasks.Where(t => t.Status == 1).Count();
             ViewBag.onprogress = project.Tasks.Where(t => t.Status == 2).Count();
             ViewBag.done = project.Tasks.Where(t => t.Status == 3).Count();
@@ -40,28 +22,48 @@ namespace SoftwareProjectManagementSystem.Controllers
             ViewBag.amount = project.PlannedAmount;
             ViewBag.spent = project.Tasks.Sum(t => t.Cost);
             ViewBag.left = ViewBag.amount - ViewBag.spent;
-            if (project == null)
-            {
-                return NotFound();
-            }
-            return View(project);
         }
-
-        // GET: Project/Create
-        public IActionResult Create()
+        private void DropDown()
         {
             ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
             ViewBag.Clients = new SelectList(db.Clients.ToList(), "Id", "Name");
+        }
+        public ProjectController(testContext db)
+        {
+            this.db = db;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
+        {
+            var projects = HelperClass.projectListWithInclude(db);
+            if (searchBy == "CreatedBy")
+            {
+                projects = projects.Where(p => p.CreatedByNavigation.Name.StartsWith(search) || search == null);
+            }
+            else
+            {
+                projects = projects.Where(p => p.Name.StartsWith(search) || search == null);
+            }
+            return View(await PagingList<Project>.CreateAsync(projects, pageNumber, 4));
+        }
+
+        // GET: Project/Create
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            DropDown();
             return View();
         }
 
         // POST: Project/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Project project)
         {
-            ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            ViewBag.Clients = new SelectList(db.Clients.ToList(), "Id", "Name");
+            DropDown();
             if (ModelState.IsValid)
             {
                 await db.Projects.AddAsync(project);
@@ -71,35 +73,38 @@ namespace SoftwareProjectManagementSystem.Controllers
             return View(project);
         }
 
+        // GET: Project/Details/5
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+            var project = await HelperClass.projectWithInclude(db, (int)id);
+            if (project == null) return NotFound();
+            else chartdata(project);
+            return View(project);
+        }
+
         // GET: Project/Edit/5
+
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            ViewBag.Clients = new SelectList(db.Clients.ToList(),"Id","Name");
-            var project = await db.Projects.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+            DropDown();
+            if (id == null) return NotFound();
+            var project = await HelperClass.projectWithInclude(db, (int)id);
+            if (project == null) return NotFound();
             return View(project);
         }
 
         // POST: Project/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Project project)
         {
-            ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            ViewBag.Clients = new SelectList(db.Clients.ToList(), "Id", "Name");
-            if (id != project.Id)
-            {
-                return NotFound();
-            }
-
+            DropDown();
+            if (id != project.Id) return NotFound();
             if (ModelState.IsValid)
             {
                 try
@@ -109,14 +114,8 @@ namespace SoftwareProjectManagementSystem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ProjectExists(project.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction("Index");
             }
@@ -124,30 +123,24 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Project/Delete/5
+        
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            ViewBag.Clients = new SelectList(db.Clients.ToList(), "Id", "Name");
-            var project = await db.Projects.Include("CreatedByNavigation").Include("CreatedForNavigation")
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
+            DropDown();
+            if (id == null) return NotFound();
+            var project = await HelperClass.projectWithInclude(db, (int)id);
+            if (project == null) return NotFound();
             return View(project);
         }
 
         // POST: Project/Delete/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var client = await db.Projects.FindAsync(id);
+            var client = await HelperClass.projectWithInclude(db, (int)id);
             db.Projects.Remove(client);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -157,6 +150,6 @@ namespace SoftwareProjectManagementSystem.Controllers
         {
             return db.Projects.Any(e => e.Id == id);
         }
-        
+
     }
 }

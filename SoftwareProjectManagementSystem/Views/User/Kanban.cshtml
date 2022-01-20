@@ -1,11 +1,11 @@
 ﻿@model List<SoftwareProjectManagementSystem.Models.Task>
 
 <div class="container py-3">
-    <div class="display-4 text-center">Kanban</div>
+    <div class="display-4 text-center">Kanban Board</div>
     <hr>
     <div class="container">
         <div class="row">
-            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
                  style="min-height: 100vh;">
                 <div class="card w-100 mt-3">
                     <div class="card-header display-6">
@@ -36,12 +36,28 @@
                                             <div class="card-text">
                                                 @task.Descrption.ToString().Substring(0, 25)...
                                             </div>
-                                            <p class="card-text mt-2">
-                                                <small class="text-muted">
-                                                    Assigned by:
-                                                    @task.CreatedByNavigation.Name
-                                                </small>
-                                            </p>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -50,14 +66,10 @@
                         </div>
                     </div>
                     <div class="card-footer w-100">
-                        <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal"
-                           data-bs-target="#exampleModal">
-                            Add
-                        </a>
                     </div>
                 </div>
             </div>
-            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
                  style="min-height: 100vh;">
                 <div class="card w-100 mt-3">
                     <div class="card-header display-6">
@@ -88,12 +100,28 @@
                                             <div class="card-text">
                                                 @task.Descrption.ToString().Substring(0, 25)...
                                             </div>
-                                            <p class="card-text mt-2">
-                                                <small class="text-muted">
-                                                    Assigned by:
-                                                    @task.CreatedByNavigation.Name
-                                                </small>
-                                            </p>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -101,14 +129,10 @@
                             }
                         </div>
                     </div>
-                    <div class="card-footer w-100">
-                        <a href="#" class="btn btn-outline-primary">
-                            Add
-                        </a>
-                    </div>
+                    <div class="card-footer w-100"></div>
                 </div>
             </div>
-            <div class="mx-auto bg-secondary col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
                  style="min-height: 100vh;">
                 <div class="card w-100 mt-3">
                     <div class="card-header display-6">
@@ -139,12 +163,28 @@
                                             <div class="card-text">
                                                 @task.Descrption.ToString().Substring(0, 25)...
                                             </div>
-                                            <p class="card-text mt-2">
-                                                <small class="text-muted">
-                                                    Assigned by:
-                                                    @task.CreatedByNavigation.Name
-                                                </small>
-                                            </p>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -152,11 +192,7 @@
                             }
                         </div>
                     </div>
-                    <div class="card-footer w-100">
-                        <a href="#" class="btn btn-outline-primary">
-                            Add
-                        </a>
-                    </div>
+                    <div class="card-footer w-100"></div>
                 </div>
             </div>
         </div>

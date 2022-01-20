@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoftwareProjectManagementSystem.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Task = SoftwareProjectManagementSystem.Models.Task;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
+    [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Project Manager")]
     public class ClientController : Controller
     {
         private readonly testContext db;
@@ -16,38 +17,32 @@ namespace SoftwareProjectManagementSystem.Controllers
         {
             this.db = db;
         }
-        // GET: Admin/Clients
-        public async Task<IActionResult> Index(int pageNumber = 1)
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
-            var clients = db.Clients.AsQueryable();
+            var clients = HelperClass.ClientListWithInclude(db);
+            if (searchBy == "CompanyName")
+            {
+                clients = clients.Where(c => c.CompanyName.StartsWith(search) || search == null);
+            }
+            else
+            {
+                clients = clients.Where(c => c.Name.StartsWith(search) || search == null);
+            }
             return base.View(await PagingList<Client>.CreateAsync(clients, pageNumber, 4));
         }
 
-        // GET: Client/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await db.Clients
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return View(client);
-        }
-
         // GET: Client/Create
+        
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Client/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Client client)
@@ -60,32 +55,36 @@ namespace SoftwareProjectManagementSystem.Controllers
             }
             return View(client);
         }
+
+        // GET: Client/Details/5
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+            var client = await HelperClass.ClientWithInclude(db, (int)id);
+            if (client == null) return NotFound();
+            return View(client);
+        }
+
         // GET: Client/Edit/5
+
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await db.Clients.FindAsync(id);
-            if (client == null)
-            {
-                return NotFound();
-            }
+            if (id == null)  return NotFound();
+            var client = await HelperClass.ClientWithInclude(db, (int)id);
+            if (client == null) return NotFound();
             return View(client);
         }
 
         // POST: Client/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,Client client)
         {
-            if (id != client.Id)
-            {
-                return NotFound();
-            }
-
+            if (id != client.Id) return NotFound();
             if (ModelState.IsValid)
             {
                 try
@@ -95,14 +94,8 @@ namespace SoftwareProjectManagementSystem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ClientExists(client.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction("Index");
             }
@@ -110,20 +103,13 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Clients/Delete/5
+        
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await db.Clients
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            var client = await HelperClass.ClientWithInclude(db, (int)id);
+            if (client == null)  return NotFound();
             return View(client);
         }
 
@@ -132,7 +118,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var client = db.Clients.Find(id);
+            var client = await HelperClass.ClientWithInclude(db, (int)id);
             db.Clients.Remove(client);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

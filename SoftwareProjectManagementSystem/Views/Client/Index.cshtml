@@ -14,6 +14,29 @@
         </div>
     </div>
     <hr>
+    <div class="col-12">
+        <div class="container">
+            <form asp-action="Index" method="GET" class="d-flex justify-content-between">
+                <div class="form-group">
+                    <strong>Search By</strong> :
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="searchBy" id="flexRadioDefault1" checked value="Name">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Name
+                    </label>
+                    &nbsp;
+                    <input class="form-check-input" type="radio" name="searchBy" id="flexRadioDefault2" value="CompanyName">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Company Name
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="search" name="search">
+                    <button type="submit" class="btn border-dark">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <table class="table table-hover table-primary w-100 mt-3 mb-0 table-responsive">
         <thead>
 
@@ -26,21 +49,30 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var client in @Model)
+            @if (Model.Count() == 0)
             {
                 <tr>
-                    <td>@client.Name</td>
-                    <td>@client.CompanyName</td>
-                    <td>@client.Address</td>
-                    <td>@client.Phone</td>
-                    <td>
-
-                        <a class="btn btn-outline-warning" asp-controller="Client" asp-action="Edit" asp-route-id="@client.Id">edit</a>
-                        <a class="btn btn-outline-primary" asp-controller="Client" asp-action="Details" asp-route-id="@client.Id">View</a>
-                        <a class="btn btn-outline-danger" asp-controller="Client" asp-action="Delete" asp-route-id="@client.Id">Delete</a>
-
-                    </td>
+                    <td colspan="5" class="text-center">No results found</td>
                 </tr>
+            }
+            else
+            {
+                @foreach (var client in @Model)
+                {
+                    <tr>
+                        <td>@client.Name</td>
+                        <td>@client.CompanyName</td>
+                        <td>@client.Address</td>
+                        <td>@client.Phone</td>
+                        <td>
+
+                            <a class="btn btn-outline-warning" asp-controller="Client" asp-action="Edit" asp-route-id="@client.Id">edit</a>
+                            <a class="btn btn-outline-primary" asp-controller="Client" asp-action="Details" asp-route-id="@client.Id">View</a>
+                            <a class="btn btn-outline-danger" asp-controller="Client" asp-action="Delete" asp-route-id="@client.Id">Delete</a>
+
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
 

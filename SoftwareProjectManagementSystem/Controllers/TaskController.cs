@@ -1,76 +1,64 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoftwareProjectManagementSystem.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Task = SoftwareProjectManagementSystem.Models.Task;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
+    [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Project Manager,Team Leader")]
     public class TaskController : Controller
     {
+        public void DropdownLoader()
+        {
+            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
+            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
+            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
+            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
+            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
+        }
+
         private readonly testContext db;
         public TaskController(testContext db)
         {
             this.db = db;
         }
-        public async Task<IActionResult> Index(int pageNumber=1)
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
-            var tasks = db.Tasks
-                .Include("AssignedToNavigation")
-                .Include("CreatedByNavigation")
-                .Include("PriorityNavigation")
-                .Include("ProjectNavigation")
-                .Include("StatusNavigation");
-
-            return View(await PagingList<Task>.CreateAsync(tasks,pageNumber,4));
-        }
-        // GET: Task/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            var tasks = HelperClass.taskListWithInclude(db);
+            if (searchBy == "ProjectName")
             {
-                return NotFound();
+                tasks = tasks.Where(t => t.ProjectNavigation.Name.StartsWith(search) || search == null);
             }
-
-            Models.Task task = await db.Tasks
-                .Include("AssignedToNavigation")
-                .Include("CreatedByNavigation")
-                .Include("PriorityNavigation")
-                .Include("ProjectNavigation")
-                .Include("StatusNavigation")
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (task == null)
+            else
             {
-                return NotFound();
+                tasks = tasks.Where(t => t.Name.StartsWith(search) || search == null);
             }
-
-            return View(task);
+            return View(await PagingList<Task>.CreateAsync(tasks, pageNumber, 4));
         }
 
         // GET: Task/Create
+
+        [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
-            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
-            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
-            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
-            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
+            DropdownLoader();
             return View();
         }
 
-        // POST: User/Create
+        // POST: Task/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.Task task)
         {
-            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
-            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
-            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
-            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
-            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
+            DropdownLoader();
             if (ModelState.IsValid)
             {
                 await db.Tasks.AddAsync(task);
@@ -80,41 +68,37 @@ namespace SoftwareProjectManagementSystem.Controllers
             return View(task);
         }
 
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Task/Details/5
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
-            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
-            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
-            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
-            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            var task = await db.Tasks.FindAsync(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+            Models.Task task = await HelperClass.taskWithInclude(db, (int)id);
+            if (task == null) return NotFound();
             return View(task);
         }
 
-        // POST: User/Edit/5
+        // GET: Task/Edit/5
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            DropdownLoader();
+            if (id == null) return NotFound();
+            var task = await HelperClass.taskWithInclude(db, (int)id);
+            if (task == null) return NotFound();
+            return View(task);
+        }
+
+        // POST: Task/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Task task)
         {
-            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
-            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
-            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
-            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
-            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            if (id != task.Id)
-            {
-                return NotFound();
-            }
-
+            DropdownLoader();
+            if (id != task.Id) return NotFound();
             if (ModelState.IsValid)
             {
                 try
@@ -124,53 +108,33 @@ namespace SoftwareProjectManagementSystem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TaskExists(task.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!TaskExists(task.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction("Index");
             }
             return View(task);
         }
 
-        // GET: User/Delete/5
+        // GET: Task/Delete/5
+
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
-            ViewBag.Priority = new SelectList(db.Priorities.ToList(), "Id", "Name");
-            ViewBag.Project = new SelectList(db.Projects.ToList(), "Id", "Name");
-            ViewBag.AssignedTo = new SelectList(db.Users.ToList().Where(u => u.Role == 4 || u.Role == 5), "Id", "Name");
-            ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
-            var user = await db.Tasks
-                .Include("AssignedToNavigation")
-                .Include("CreatedByNavigation")
-                .Include("PriorityNavigation")
-                .Include("ProjectNavigation")
-                .Include("StatusNavigation")
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
+            DropdownLoader();
+            if (id == null) return NotFound();
+            var task = await HelperClass.taskWithInclude(db, (int)id);
+            if (task == null) return NotFound();
+            return View(task);
         }
 
-        // POST: Admin/DeleteUser/5
+        // POST: Task/Delete/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var task = await db.Tasks.FindAsync(id);
+            var task = await HelperClass.taskWithInclude(db, (int)id);
             db.Tasks.Remove(task);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

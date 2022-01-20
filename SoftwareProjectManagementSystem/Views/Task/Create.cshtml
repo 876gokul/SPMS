@@ -3,6 +3,14 @@
     ViewData["Title"] = "Create Tasks";
 }
 <div class="container">
+    <div class="d-flex align-items-center">
+        <a class="no-underline text-secondary display-4 d-inline col-12 text-center" asp-controller="Admin" asp-action="Tasks">
+            Manage Tasks
+        </a>
+    </div>
+    <hr>
+</div>
+<div class="container">
     <form asp-action="Create" method="post">
         <div class="card col-12 col-sm-6 col-md-6 mt-3 mx-auto">
             <div class="card-title text-center pt-3">

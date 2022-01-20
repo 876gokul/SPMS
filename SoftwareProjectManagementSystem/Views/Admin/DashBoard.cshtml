@@ -1,0 +1,135 @@
+﻿@model SoftwareProjectManagementSystem.ViewModels.DashBoardData
+@{
+    ViewData["Title"] = "DashBoard";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+    var labels = [];
+    var data = [];
+    var bgcolors = [];
+    function random_rgba() {
+        var o = Math.round, r = Math.random, s = 255;
+        return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s)+',0.7' + ')';
+    }
+    function formatLabel(str, maxwidth) {
+        var sections = [];
+        var words = str.split(" ");
+        var temp = "";
+
+        words.forEach(function (item, index) {
+            if (temp.length > 0) {
+                var concat = temp + ' ' + item;
+
+                if (concat.length > maxwidth) {
+                    sections.push(temp);
+                    temp = "";
+                }
+                else {
+                    if (index == (words.length - 1)) {
+                        sections.push(concat);
+                        return;
+                    }
+                    else {
+                        temp = concat;
+                        return;
+                    }
+                }
+            }
+
+            if (index == (words.length - 1)) {
+                sections.push(item);
+                return;
+            }
+
+            if (item.length < maxwidth) {
+                temp = item;
+            }
+            else {
+                sections.push(item);
+            }
+
+        });
+
+        return sections;
+    }
+
+    @foreach (var label in Model.ProjectsName())
+    {
+       @:labels.push(formatLabel("@label",15))
+       @:bgcolors.push(random_rgba())
+    }
+    @foreach (var item in Model.NoOfTasksInEachProjects())
+    {
+        @:data.push("@item");
+    }
+
+    const config = {type: 'bar', data: { labels: labels, datasets: [{label:'No Of Tasks', backgroundColor: bgcolors, data: data }]}, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }}};
+    labels = [], bgcolors = [], data = []
+    @foreach (var label in Model.ProjectsName())
+    {
+       @:labels.push("@label")
+       @:bgcolors.push(random_rgba())
+    }
+    @foreach (var item in Model.PlannedBudgetForEachProject())
+    {
+        @:data.push("@item");
+    }
+
+
+    const config2 = {type: 'doughnut', data: { labels: labels, datasets: [{ label: 'Planned Amount', backgroundColor: bgcolors, data: data, hoverOffset: 15, }] },options: {responsive: true,maintainAspectRatio: false,}}
+    labels = ["No of Clients", "No of Projects","No of Users"], bgcolors = [], data = []
+    for (var i = 0; i < 4; i++) bgcolors.push(random_rgba())
+    data = ['@Model.NoOfClients()', '@Model.NoOfProjects()', '@Model.NoOfUsers()']
+    const config3 = { type: 'doughnut', data: { labels: labels, datasets: [{ label: 'Planned Amount', backgroundColor: bgcolors, data: data, hoverOffset: 15, }] }, options: { responsive: true, maintainAspectRatio: false, } }
+    labels = ["Todo", "Doing", "Done"], bgcolors = [], data = []
+    for (var i = 0; i < 3; i++) bgcolors.push(random_rgba())
+    data = ['@Model.NoOfTasksTodo()', '@Model.NoOfTasksOnGoing()', '@Model.NoOfTasksDone()']
+    const config4 = { type: 'bar', data: { labels: labels, datasets: [{ label: 'No Of Tasks', backgroundColor: bgcolors, data: data }] }, options: { responsive: true, maintainAspectRatio: false } };
+
+    console.log(config4)
+
+</script>
+<div class="container">
+    <div class="display-4 text-center">Target Tracker DashBoard</div>
+    <hr>
+</div>
+<div class="container d-flex justify-content-around flex-wrap">
+    <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+        <div class="card-header">
+            <div class="fs-3 text-center text-info">No Of Tasks In Each Projects</div>
+        </div>
+        <div class="card-body" style="height:250px">
+            <canvas id="myChart" class=""></canvas>
+        </div>
+    </div>
+    <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+        <div class="card-header">
+            <div class="fs-3 text-center text-info">Planned Amount For Each Projects</div>
+        </div>
+        <div class="card-body" style="height:250px">
+            <canvas id="myChart2" class="" ></canvas>
+        </div>
+    </div>
+    <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+        <div class="card-header">
+            <div class="fs-3 text-center text-info">Useful Informations</div>
+        </div>
+        <div class="card-body" style="height:250px">
+            <canvas id="myChart3" class="" ></canvas>
+        </div>
+    </div>
+    <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+        <div class="card-header">
+            <div class="fs-3 text-center text-info">Task Based On Status</div>
+        </div>
+        <div class="card-body" style="height:250px">
+            <canvas id="myChart4" class="" ></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    const myChart = new Chart(document.getElementById('myChart'), config);
+    const myChart2 = new Chart(document.getElementById('myChart2'), config2);
+    const myChart3 = new Chart(document.getElementById('myChart3'), config3);
+    const myChart4 = new Chart(document.getElementById('myChart4'), config4);
+</script>

@@ -4,7 +4,15 @@
     ViewData["Title"] = "Task Details";
 }
 <div class="container">
-    <div class="card col-12 col-sm-6 col-md-4 mt-3">
+    <div class="d-flex align-items-center">
+        <a class="no-underline text-secondary display-4 d-inline col-12 text-center" asp-controller="Admin" asp-action="Tasks">
+            Manage Tasks
+        </a>
+    </div>
+    <hr>
+</div>
+<div class="container">
+    <div class="card col-12 col-sm-6 col-md-4 mt-3 mx-auto">
         <div class="card-header">
             <h5 class="modal-title" id="ClientModelLabel">Details of <span>@Model.Name</span> in <span>@Model.ProjectNavigation.Name</span> project</h5>
         </div>
@@ -31,8 +39,8 @@
             }
         </div>
         <div class="card-footer">
-            <a class="btn btn-outline-primary" asp-action="Index">Back To Users</a>
-            <a asp-action="EditClient" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-outline-primary" asp-action="Index">Back To Task</a>
+            <a asp-action="Edit" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit</a>
         </div>
     </div>
 

@@ -58,7 +58,7 @@ namespace SoftwareProjectManagementSystem
             {
                 endpoints.MapControllerRoute(
                   name: "areas",
-                  pattern: "{controller=Admin}/{action=Index}/{id?}"
+                  pattern: "{controller=User}/{action=Profile}/{id?}"
                 );
             });
         }

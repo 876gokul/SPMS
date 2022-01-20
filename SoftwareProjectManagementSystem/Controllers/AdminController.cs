@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SoftwareProjectManagementSystem.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Task = SoftwareProjectManagementSystem.Models.Task;
+using SoftwareProjectManagementSystem.ViewModels;
 
 namespace SoftwareProjectManagementSystem.Controllers
 {
-    [Authorize]
+    [AutoValidateAntiforgeryToken]
+    [Authorize(Roles = "Admin,Project Manager,Team Leader")]
+
     public class AdminController : Controller
     {
         private readonly testContext db;
@@ -17,37 +15,37 @@ namespace SoftwareProjectManagementSystem.Controllers
         {
             this.db = db;
         }
-        public IActionResult Index()
-        {
-            ViewBag.user = HttpContext.User;
-            return View();
-        }
+        
+        [HttpGet]
         public IActionResult Dashboard()
         {
-            return View();
+            var projects = HelperClass.projectListWithInclude(db);
+            var clients = HelperClass.ClientListWithInclude(db);
+            var users = HelperClass.UserListWithInclude(db);
+            var tasks = HelperClass.taskListWithInclude(db);
+            var data = new DashBoardData(projects,clients,users,tasks);
+            return View(data);
         }
-        public IActionResult Kanban(int projectId)
-        {
-            var tasks = db.Tasks.Where(t => t.Project == projectId)
-                .Include("AssignedToNavigation")
-                .Include("CreatedByNavigation")
-                .Include("PriorityNavigation")
-                .Include("ProjectNavigation")
-                .Include("StatusNavigation");
-            return View(tasks); 
-        }
+        
+        [HttpGet]
         public IActionResult Clients()
         {
             return RedirectToAction("Index", "Client");
         }
+
+        [HttpGet]
         public IActionResult Users()
         {
             return RedirectToAction("Index", "User");
         }
+
+        [HttpGet]
         public IActionResult Projects()
         {
             return RedirectToAction("Index", "Project");
         }
+
+        [HttpGet]
         public IActionResult Tasks()
         {
             return RedirectToAction("Index", "Task");

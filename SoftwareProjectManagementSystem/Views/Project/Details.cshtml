@@ -5,40 +5,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 <script>
     let total = '@ViewBag.total'
-    const config = {
-        type: 'bar',
-        data: {
-            labels: ['To Do', 'On Progress', 'Completed'],
-            datasets: [{
-                label:'Task status',
-                backgroundColor: ['#0F2C67', '#CD1818', '#F3950D', '#344CB7'],
-                data: ['@ViewBag.todo', '@ViewBag.onprogress',  '@ViewBag.done']
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    max: total
-                }
-            }
-        }
-    };
-
-    const config2 = {
-        type: 'doughnut',
-        data: {
-            labels: ['Amount Spent', 'Amount remaining'],
-            datasets:[{
-                label: 'Cost Analysis',
-                backgroundColor: ['#FF5959', '#676FA3'],
-                data:['@ViewBag.spent', '@ViewBag.left']
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-        }
-    };
-
+    const config = {type: 'bar',data: {labels: ['To Do', 'On Progress', 'Completed'],datasets: [{label:'Task status',backgroundColor: ['#0F2C67', '#CD1818', '#F3950D', '#344CB7'],data: ['@ViewBag.todo', '@ViewBag.onprogress',  '@ViewBag.done']}]},options: {scales: {y: {max: total}}}};
+    const config2 = {type: 'doughnut',data: {labels: ['Amount Spent', 'Amount remaining'],datasets:[{label: 'Cost Analysis',backgroundColor: ['#FF5959', '#676FA3'],data:['@ViewBag.spent', '@ViewBag.left']}]},options: {maintainAspectRatio: false,}};
 </script>
 <div class="container">
     <div class="container">
@@ -49,17 +17,17 @@
         </div>
     </div>
     <hr>
-    <div class="row">
-        <div class="card col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+    <div class="container d-flex justify-content-around">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
             <canvas id="myChart" class="w-100"></canvas>
         </div>
-        <div class="card col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
             <canvas id="myChart2" class="col-12 col-sm-12 col-md-12 col-lg-6" style="height: 254px;"></canvas>
         </div>
     </div>
-    <div class="row">
+    <div class="container d-flex justify-content-around">
 
-        <div class="card col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
             <div class="card-header">
                 <h5 class="card-title h4">Details of <span>@Model.Name</span></h5>
             </div>
@@ -93,7 +61,7 @@
                 <a asp-action="Edit" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit project</a>
             </div>
         </div>
-        <div class="card col-12 col-sm-12 col-md-12 col-lg-6 mt-3">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
             <div class="card-header">
                 <h5 class="card-title h4">Details of <span>@Model.CreatedForNavigation.CompanyName</span></h5>
             </div>
@@ -112,7 +80,7 @@
         </div>
 
     </div>
-    <partial name="~/Views/Admin/Kanban.cshtml" />
+    <partial name="~/Views/User/Kanban.cshtml" model="@Model.Tasks.ToList()" />
 </div>
 <script>
     const myChart = new Chart(

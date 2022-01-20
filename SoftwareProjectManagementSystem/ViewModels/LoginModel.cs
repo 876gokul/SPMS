@@ -12,6 +12,7 @@ namespace SoftwareProjectManagementSystem.Models
         [DisplayName("Name")]
         [Required]
         public string Username { get; set; }
+        
         [DisplayName("Password")]
         [Required]
         public string Password { get; set; }
