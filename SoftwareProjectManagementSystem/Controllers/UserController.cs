@@ -15,6 +15,12 @@ namespace SoftwareProjectManagementSystem.Controllers
     public class UserController : Controller
     {
         private readonly testContext db;
+        // Constructor
+        public UserController(testContext db)
+        {
+            this.db = db;
+        }
+
         // Helper Functions
         private async Task<User> CurrentUser()
         {
@@ -29,19 +35,17 @@ namespace SoftwareProjectManagementSystem.Controllers
         {
             ViewBag.Roles = new SelectList(db.Roles.ToList(), "Id", "Role1");
         }
-        // Constructor
-        public UserController(testContext db)
-        {
-            this.db = db;
-        }
 
+        // GET: User/Profile
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
             ViewBag.CurrentUser = await CurrentUser();
             return View();
         }
-        [Authorize(Roles = "Admin")]
+        
+        // GET: User/Index
+        [HttpGet][Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
             var users = HelperClass.UserListWithInclude(db);
@@ -53,30 +57,32 @@ namespace SoftwareProjectManagementSystem.Controllers
             {
                 users = users.Where(u => u.Name.StartsWith(search) || search == null);
             }
+            
             return View(await PagingList<User>.CreateAsync(users, pageNumber, 4));
         }
 
+        // GET: User/Kanban
+        [HttpGet][Authorize(Roles = "Developer,Tester")]
         public async Task<IActionResult> Kanban()
         {
             var user = await CurrentUser();
             var tasks = HelperClass.taskListWithInclude(db);
             tasks = tasks.Where(t => t.AssignedToNavigation.Id == user.Id || t.CreatedByNavigation.Id == user.Id);
+             
             return View(tasks.ToList());
         }
 
         // GET: User/Create
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet][Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             DropDown();
+             
             return View();
         }
 
         // POST: User/Create
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][Authorize(Roles = "Admin")][ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(User user)
         {
             DropDown();
@@ -91,32 +97,30 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: User/Details/5
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet][Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
             var user = await HelperClass.UserWithInclude(db, (int)id);
             if (user == null) return NotFound();
+            
             return View(user);
         }
 
         // GET: User/Edit/5
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet][Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             DropDown();
             if (id == null) return NotFound();
             var user = await db.Users.FindAsync(id);
             if (user == null) return NotFound();
+            
             return View(user);
         }
 
         // POST: User/Edit/5
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][Authorize(Roles = "Admin")][ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, User user)
         {
             DropDown();
@@ -140,21 +144,19 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: User/Delete/5
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet][Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             DropDown();
             if (id == null) return NotFound();
             var user = await HelperClass.UserWithInclude(db, (int)id);
             if (user == null) return NotFound();
+            
             return View(user);
         }
 
         // POST: Admin/DeleteUser/5
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][Authorize(Roles = "Admin")][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var user = await db.Users.FindAsync(id);
@@ -163,6 +165,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        // returns true if user is found
+        // returns false if user is not found
         private bool UserExists(int id)
         {
             return db.Users.Any(e => e.Id == id);

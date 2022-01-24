@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoftwareProjectManagementSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -15,21 +16,31 @@ namespace SoftwareProjectManagementSystem.Controllers
     public class AccountController : Controller
     {
         private readonly testContext db;
-
+        // Constructor
         public AccountController(testContext db)
         {
             this.db = db;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+        // Helper Functions
+        private void DeleteCookies()
+        {
+            foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                Response.Cookies.Delete(cookie.Key);
+            }
+        }
+
+        // GET: Account/Login
+        [HttpGet][AllowAnonymous]
         public IActionResult Login(string returnUrl = "/")
         {
+            
             return View(new LoginModel { ReturnUrl = returnUrl });
         }
 
-        [HttpPost]
-        [AllowAnonymous]
+        // POST: Account/Login
+        [HttpPost][AllowAnonymous]
         public async Task<IActionResult> Login(LoginModel model)
         {
             var users = db.Users.Include("RoleNavigation");
@@ -55,12 +66,15 @@ namespace SoftwareProjectManagementSystem.Controllers
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = model.RememberLogin });
-
             return LocalRedirect(model.ReturnUrl);
         }
+        
+        // GET: Account/Logout
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
+            DeleteCookies();
+            
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("/");
         }

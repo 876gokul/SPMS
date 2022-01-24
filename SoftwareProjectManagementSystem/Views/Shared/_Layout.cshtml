@@ -42,7 +42,7 @@
                 {
 
 
-                    @if (this.User.IsInRole("Admin"))
+                    @if (this.User.IsInRole("Admin") || this.User.IsInRole("Project Manager"))
                     {
                         <li class="nav-item">
                             <a asp-controller="Client" asp-action="Index" class="nav-link text-white" aria-current="page">
@@ -50,12 +50,15 @@
                                 Manage Clients
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a asp-controller="User" asp-action="Index" class="nav-link text-white" aria-current="page">
-                                <i class="bi bi-people"></i>
-                                Manage Users
-                            </a>
-                        </li>
+                        @if (this.User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="User" asp-action="Index" class="nav-link text-white" aria-current="page">
+                                    <i class="bi bi-people"></i>
+                                    Manage Users
+                                </a>
+                            </li>
+                        }
                     }
                     <li class="nav-item">
                         <a asp-controller="Project" asp-action="Index" class="nav-link text-white" aria-current="page">

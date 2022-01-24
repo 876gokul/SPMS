@@ -22,7 +22,7 @@
             </div>
         </div>
         <hr>
-        @if (this.User.IsInRole("Admin"))
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Project Manager") || this.User.IsInRole("Team Leader"))
         {
             <div class="col-12 d-flex align-items-center justify-content-start">
                 <i class="fs-1 bi bi-arrow-right-circle text-dark mt-3">

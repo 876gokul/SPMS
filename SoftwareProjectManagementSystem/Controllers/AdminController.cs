@@ -11,14 +11,17 @@ namespace SoftwareProjectManagementSystem.Controllers
     public class AdminController : Controller
     {
         private readonly testContext db;
+        // Constructor
         public AdminController(testContext db)
         {
             this.db = db;
         }
-        
+
+        // GET: Admin/Dashboard
         [HttpGet]
         public IActionResult Dashboard()
         {
+            
             var projects = HelperClass.projectListWithInclude(db);
             var clients = HelperClass.ClientListWithInclude(db);
             var users = HelperClass.UserListWithInclude(db);
@@ -27,28 +30,5 @@ namespace SoftwareProjectManagementSystem.Controllers
             return View(data);
         }
         
-        [HttpGet]
-        public IActionResult Clients()
-        {
-            return RedirectToAction("Index", "Client");
-        }
-
-        [HttpGet]
-        public IActionResult Users()
-        {
-            return RedirectToAction("Index", "User");
-        }
-
-        [HttpGet]
-        public IActionResult Projects()
-        {
-            return RedirectToAction("Index", "Project");
-        }
-
-        [HttpGet]
-        public IActionResult Tasks()
-        {
-            return RedirectToAction("Index", "Task");
-        }
     }
 }

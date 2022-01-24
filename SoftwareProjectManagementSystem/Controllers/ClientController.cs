@@ -12,12 +12,13 @@ namespace SoftwareProjectManagementSystem.Controllers
     public class ClientController : Controller
     {
         private readonly testContext db;
-
+        // Constructor
         public ClientController(testContext db)
         {
             this.db = db;
         }
-
+        
+        // GET: Client/Index
         [HttpGet]
         public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
@@ -34,17 +35,15 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Client/Create
-        
         [HttpGet]
         public IActionResult Create()
         {
+            
             return View();
         }
 
         // POST: Client/Create
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Client client)
         {
             if (ModelState.IsValid)
@@ -57,10 +56,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Client/Details/5
-
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            
             if (id == null) return NotFound();
             var client = await HelperClass.ClientWithInclude(db, (int)id);
             if (client == null) return NotFound();
@@ -68,10 +67,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Client/Edit/5
-
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            
             if (id == null)  return NotFound();
             var client = await HelperClass.ClientWithInclude(db, (int)id);
             if (client == null) return NotFound();
@@ -79,9 +78,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Client/Edit/5
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,Client client)
         {
             if (id != client.Id) return NotFound();
@@ -103,10 +100,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Clients/Delete/5
-        
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            
             if (id == null) return NotFound();
             var client = await HelperClass.ClientWithInclude(db, (int)id);
             if (client == null)  return NotFound();
@@ -114,8 +111,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Clients/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var client = await HelperClass.ClientWithInclude(db, (int)id);
@@ -124,6 +120,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        // returns true if client found
+        // returns false if client is not found
         private bool ClientExists(int id)
         {
             return db.Clients.Any(e => e.Id == id);

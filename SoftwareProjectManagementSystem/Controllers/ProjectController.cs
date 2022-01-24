@@ -13,7 +13,14 @@ namespace SoftwareProjectManagementSystem.Controllers
     public class ProjectController : Controller
     {
         private readonly testContext db;
-        void chartdata(Project project)
+        // Constructor
+        public ProjectController(testContext db)
+        {
+            this.db = db;
+        }
+
+        // Helper Functions
+        private void chartdata(Project project)
         {
             ViewBag.todo = project.Tasks.Where(t => t.Status == 1).Count();
             ViewBag.onprogress = project.Tasks.Where(t => t.Status == 2).Count();
@@ -28,11 +35,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
             ViewBag.Clients = new SelectList(db.Clients.ToList(), "Id", "Name");
         }
-        public ProjectController(testContext db)
-        {
-            this.db = db;
-        }
-
+        
+        // GET: Project/Index
         [HttpGet]
         public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
@@ -49,18 +53,16 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Project/Create
-
         [HttpGet]
         public IActionResult Create()
         {
+            
             DropDown();
             return View();
         }
 
         // POST: Project/Create
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Project project)
         {
             DropDown();
@@ -74,10 +76,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Project/Details/5
-
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            
             if (id == null) return NotFound();
             var project = await HelperClass.projectWithInclude(db, (int)id);
             if (project == null) return NotFound();
@@ -86,10 +88,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Project/Edit/5
-
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            
             DropDown();
             if (id == null) return NotFound();
             var project = await HelperClass.projectWithInclude(db, (int)id);
@@ -98,9 +100,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Project/Edit/5
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Project project)
         {
             DropDown();
@@ -123,10 +123,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Project/Delete/5
-        
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            
             DropDown();
             if (id == null) return NotFound();
             var project = await HelperClass.projectWithInclude(db, (int)id);
@@ -135,9 +135,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Project/Delete/5
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var client = await HelperClass.projectWithInclude(db, (int)id);
@@ -146,6 +144,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        // returns true if project found
+        // returns false if project is not found
         private bool ProjectExists(int id)
         {
             return db.Projects.Any(e => e.Id == id);

@@ -13,6 +13,14 @@ namespace SoftwareProjectManagementSystem.Controllers
     [Authorize(Roles = "Admin,Project Manager,Team Leader")]
     public class TaskController : Controller
     {
+        private readonly testContext db;
+        // Constructor
+        public TaskController(testContext db)
+        {
+            this.db = db;
+        }
+
+        // Helper Functions
         public void DropdownLoader()
         {
             ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");
@@ -22,12 +30,7 @@ namespace SoftwareProjectManagementSystem.Controllers
             ViewBag.CreatedBy = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
         }
 
-        private readonly testContext db;
-        public TaskController(testContext db)
-        {
-            this.db = db;
-        }
-
+        // GET: Task/Index
         [HttpGet]
         public async Task<IActionResult> Index(string searchBy, string search, int pageNumber = 1)
         {
@@ -44,20 +47,19 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Task/Create
-
         [HttpGet]
         public IActionResult Create()
         {
+            
             DropdownLoader();
             return View();
         }
 
         // POST: Task/Create
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Models.Task task)
         {
+            
             DropdownLoader();
             if (ModelState.IsValid)
             {
@@ -69,10 +71,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Task/Details/5
-
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
+            
             if (id == null) return NotFound();
             Models.Task task = await HelperClass.taskWithInclude(db, (int)id);
             if (task == null) return NotFound();
@@ -80,10 +82,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Task/Edit/5
-
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
+            
             DropdownLoader();
             if (id == null) return NotFound();
             var task = await HelperClass.taskWithInclude(db, (int)id);
@@ -92,9 +94,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Task/Edit/5
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Task task)
         {
             DropdownLoader();
@@ -117,10 +117,10 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // GET: Task/Delete/5
-
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
+            
             DropdownLoader();
             if (id == null) return NotFound();
             var task = await HelperClass.taskWithInclude(db, (int)id);
@@ -129,9 +129,7 @@ namespace SoftwareProjectManagementSystem.Controllers
         }
 
         // POST: Task/Delete/5
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var task = await HelperClass.taskWithInclude(db, (int)id);
@@ -140,6 +138,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        // returns true if task is found
+        // returns false if task is not found
         private bool TaskExists(int id)
         {
             return db.Tasks.Any(e => e.Id == id);
