@@ -19,7 +19,7 @@ namespace SoftwareProjectManagementSystem.Controllers
             this.db = db;
         }
 
-        // Helper Functions
+        // Helper Functions for populating chart data
         private void chartdata(Project project)
         {
             ViewBag.todo = project.Tasks.Where(t => t.Status == 1).Count();
@@ -30,6 +30,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             ViewBag.spent = project.Tasks.Sum(t => t.Cost);
             ViewBag.left = ViewBag.amount - ViewBag.spent;
         }
+        
+        // Helper function for select list dropdown
         private void DropDown()
         {
             ViewBag.Users = new SelectList(db.Users.ToList().Where(u => u.Role == 1 || u.Role == 2 || u.Role == 3), "Id", "Name");
@@ -138,8 +140,8 @@ namespace SoftwareProjectManagementSystem.Controllers
         [HttpPost][ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var client = await HelperClass.projectWithInclude(db, (int)id);
-            db.Projects.Remove(client);
+            var project = await HelperClass.projectWithInclude(db, (int)id);
+            db.Projects.Remove(project);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

@@ -20,7 +20,7 @@ namespace SoftwareProjectManagementSystem.Controllers
             this.db = db;
         }
 
-        // Helper Functions
+        // Helper Functions for select list dropdowns
         public void DropdownLoader()
         {
             ViewBag.Status = new SelectList(db.Statuses.ToList(), "Id", "Name");

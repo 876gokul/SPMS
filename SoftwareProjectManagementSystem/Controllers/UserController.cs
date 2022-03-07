@@ -21,7 +21,7 @@ namespace SoftwareProjectManagementSystem.Controllers
             this.db = db;
         }
 
-        // Helper Functions
+        // Helper Function for getting Current User data from cookies
         private async Task<User> CurrentUser()
         {
             Dictionary<string, string> User = new Dictionary<string, string>();
@@ -31,6 +31,8 @@ namespace SoftwareProjectManagementSystem.Controllers
             }
             return await HelperClass.UserWithInclude(db, Convert.ToInt32(User["Id"]));
         }
+
+        // Helper Function for select list dropdown
         private void DropDown()
         {
             ViewBag.Roles = new SelectList(db.Roles.ToList(), "Id", "Role1");

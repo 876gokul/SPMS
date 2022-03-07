@@ -22,7 +22,7 @@ namespace SoftwareProjectManagementSystem.Controllers
             this.db = db;
         }
 
-        // Helper Functions
+        // Helper Function to delete cookies
         private void DeleteCookies()
         {
             foreach (var cookie in HttpContext.Request.Cookies)
