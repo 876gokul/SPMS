@@ -1,0 +1,40 @@
+﻿@model SoftwareProjectManagementSystem.Models.Client
+@{
+    ViewData["Title"] = "Client Details";
+}
+<div class="container">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <a class="no-underline text-secondary display-4 d-inline col-12 text-center" asp-controller="Admin" asp-action="Clients">
+                Manage Clients
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="card col-12 col-sm-6 col-md-4 mt-3 mx-auto">
+        <div class="card-header">
+            <h5 class="card-title">Details of <span>@Model.CompanyName</span></h5>
+        </div>
+        <div class="card-body">
+            @{
+                <div class="cardtext h4">
+                    <strong>Company Name : </strong> <span>@Model.CompanyName</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Name : </strong> <span>@Model.Name</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Address : </strong> <span>@Model.Address</span>
+                </div>
+                <div class="cardtext">
+                    <strong>Contact Phone : </strong> <span>@Model.Phone</span>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-primary" asp-action="Index">Back To Clients</a>
+            <a asp-action="Edit" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit</a>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,62 @@
+﻿@model SoftwareProjectManagementSystem.Models.Task
+@{
+    Layout = "_LoginLayout";
+}
+
+<div>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descrption)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descrption)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cost)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AssignedToNavigation.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AssignedToNavigation.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedByNavigation.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedByNavigation.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PriorityNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PriorityNavigation.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProjectNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProjectNavigation.Descrption)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatusNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatusNavigation.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

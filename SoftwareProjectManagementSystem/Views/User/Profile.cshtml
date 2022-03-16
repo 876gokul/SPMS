@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+<div class="container py-3">
+    <div class="display-4 text-center">Welcome to Target Tracker</div>
+    <hr>
+    <div class="container">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center justify-content-center  border-2 border-end">
+                    <i class="bi bi-person-circle display-1"></i>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body text-center text-sm-start">
+                        <h5 class="card-title">Role : @ViewBag.CurrentUser.RoleNavigation.Role1 </h5>
+                        <hr>
+                        <p class="card-text">Email : <span>@ViewBag.CurrentUser.Email</span></p>
+                        <p class="card-text">Phone :<span>@ViewBag.CurrentUser.Phone</span></p>
+                        <p class="card-text">Employee Id : <small class="text-muted">@ViewBag.CurrentUser.EmployeeId</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Project Manager") || this.User.IsInRole("Team Leader"))
+        {
+            <div class="col-12 d-flex align-items-center justify-content-start">
+                <i class="fs-1 bi bi-arrow-right-circle text-dark mt-3">
+                    <a asp-controller="Admin" asp-action="Dashboard" class="btn ">Dashboard</a>
+                </i>
+            </div>
+            <hr>
+        }
+        @if (this.User.IsInRole("Developer") || this.User.IsInRole("Tester"))
+        {
+            <div class="col-12 d-flex align-items-center justify-content-start">
+                <i class="fs-1 bi bi-arrow-right-circle text-dark mt-3">
+                    <a asp-controller="User" asp-action="Kanban" class="btn ">Kanban</a>
+                </i>
+            </div>
+        }
+        </div>
+    </div>

@@ -1,0 +1,95 @@
+﻿@model SoftwareProjectManagementSystem.Models.Project
+@{
+    ViewData["Title"] = "Project Details";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+    let total = '@ViewBag.total'
+    const config = {type: 'bar',data: {labels: ['To Do', 'On Progress', 'Completed'],datasets: [{label:'Task status',backgroundColor: ['#0F2C67', '#CD1818', '#F3950D', '#344CB7'],data: ['@ViewBag.todo', '@ViewBag.onprogress',  '@ViewBag.done']}]},options: {scales: {y: {max: total}}}};
+    const config2 = {type: 'doughnut',data: {labels: ['Amount Spent', 'Amount remaining'],datasets:[{label: 'Cost Analysis',backgroundColor: ['#FF5959', '#676FA3'],data:['@ViewBag.spent', '@ViewBag.left']}]},options: {maintainAspectRatio: false,}};
+</script>
+<div class="container">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <a class="no-underline text-secondary display-4 d-inline col-12 text-center" asp-controller="Admin" asp-action="Projects">
+                Manage Projects
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="container d-flex justify-content-around">
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+            <canvas id="myChart" class="w-100"></canvas>
+        </div>
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+            <canvas id="myChart2" class="col-12 col-sm-12 col-md-12 col-lg-6" style="height: 254px;"></canvas>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-around">
+
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+            <div class="card-header">
+                <h5 class="card-title h4">Details of <span>@Model.Name</span></h5>
+            </div>
+            <div class="card-body">
+                @{
+                    <div class="cardtext h4">
+                        <strong>Name : </strong> <span>@Model.Name</span>
+                    </div>
+                    <div class="cardtext">
+                        <strong>Description : </strong> <span>@Model.Descrption</span>
+                    </div>
+                    <div class="cardtext">
+                        <strong>Start Date : </strong> <span>@Model.StartDate.ToShortDateString()</span>
+                    </div>
+                    <div class="cardtext">
+                        <strong>End Date : </strong>
+                        @if (Model.EndDate != null)
+                        {
+                            var endDate = Model.EndDate.Value.ToShortDateString();
+                            <span>@endDate</span>
+                        }
+                        else
+                        {
+                            <span>@Model.EndDate</span>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back To Projects</a>
+                <a asp-action="Edit" class="btn btn-outline-dark" asp-route-id="@Model.Id">Edit project</a>
+            </div>
+        </div>
+        <div class="card col-12 col-sm-12 col-md-12 col-lg-5 mt-3">
+            <div class="card-header">
+                <h5 class="card-title h4">Details of <span>@Model.CreatedForNavigation.CompanyName</span></h5>
+            </div>
+            <div class="card-body">
+                @{
+                    <div class="card-text"><strong>Company Name : </strong> @Model.CreatedForNavigation.CompanyName</div>
+                    <div class="card-text"><strong>Contact Name : </strong> @Model.CreatedForNavigation.Name</div>
+                    <div class="card-text"><strong>Contact Number : </strong> @Model.CreatedForNavigation.Phone</div>
+                    <div class="card-title"><strong>Created By </strong>: @Model.CreatedByNavigation.Name </div>
+                }
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-outline-primary" asp-action="Index">Back To Projects</a>
+                <a asp-controller="Client" asp-action="Edit" class="btn btn-outline-dark" asp-route-id="@Model.CreatedForNavigation.Id">Edit Client</a>
+            </div>
+        </div>
+
+    </div>
+    <partial name="~/Views/User/Kanban.cshtml" model="@Model.Tasks.ToList()" />
+</div>
+<script>
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+    const myChart2 = new Chart(
+        document.getElementById('myChart2'),
+        config2
+    );
+</script>
+

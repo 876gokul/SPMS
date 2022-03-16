@@ -1,0 +1,200 @@
+﻿@model List<SoftwareProjectManagementSystem.Models.Task>
+
+<div class="container py-3">
+    <div class="display-4 text-center">Kanban Board</div>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        Todo
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowdrop(event)" id="list3">
+                            @foreach (var task in Model)
+                            {
+                                string color = "bg";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("High")) color = "bg-danger py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Medium")) color = "bg-secondary py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Low")) color = "bg-primary py-2 ";
+                                if (@task.StatusNavigation.Name.TrimEnd().Equals("To Do"))
+                                {
+                                    <div class="card w-100 rounded mb-3" draggable="true" ondragstart="drag(event)"
+                                         id="@task.Id">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <div class="lead">
+                                                <sapn>@task.Name</sapn>
+                                                <span class="badge rounded-pill @color">@task.PriorityNavigation.Name</span>
+                                            </div>
+                                            <i class=" btn bi bi-justify"></i>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="fs-4">@task.ProjectNavigation.Name</div>
+                                            <div class="card-text">
+                                                @task.Descrption.ToString().Substring(0, 25)...
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer w-100">
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        In Progress
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3 w-100" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowdrop(event)" id="list1">
+                            @foreach (var task in Model)
+                            {
+                                string color = "bg";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("High")) color = "bg-danger py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Medium")) color = "bg-secondary py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Low")) color = "bg-primary py-2 ";
+                                if (@task.StatusNavigation.Name.TrimEnd().Equals("On Progress"))
+                                {
+                                    <div class="card w-100 rounded mb-3" draggable="true" ondragstart="drag(event)"
+                                         id="@task.Id">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <div class="lead">
+                                                @task.Name
+                                                <span class="badge rounded-pill @color">@task.PriorityNavigation.Name</span>
+                                            </div>
+                                            <i class=" btn bi bi-justify"></i>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="fs-4">@task.ProjectNavigation.Name</div>
+                                            <div class="card-text">
+                                                @task.Descrption.ToString().Substring(0, 25)...
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer w-100"></div>
+                </div>
+            </div>
+            <div class="mx-auto col-12 col-sm-6 col-md-4 m-2 pb-5 d-inline-block"
+                 style="min-height: 100vh;">
+                <div class="card w-100 mt-3">
+                    <div class="card-header display-6">
+                        Done
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="card-list p-3" style="min-height: 50px;" ondrop="drop(event,this)"
+                             ondragover="allowdrop(event)" id="list2">
+                            @foreach (var task in Model)
+                            {
+                                string color = "bg";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("High")) color = "bg-danger py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Medium")) color = "bg-secondary py-2 ";
+                                if (@task.PriorityNavigation.Name.TrimEnd().Equals("Low")) color = "bg-primary py-2 ";
+                                if (@task.StatusNavigation.Name.TrimEnd().Equals("Done"))
+                                {
+                                    <div class="card w-100 rounded mb-3" draggable="true" ondragstart="drag(event)"
+                                         id="@task.Id">
+                                        <div class="card-header d-flex align-items-center justify-content-between ">
+                                            <div class="lead">
+                                                @task.Name
+                                                <span class="badge rounded-pill @color">@task.PriorityNavigation.Name</span>
+                                            </div>
+                                            <i class=" btn bi bi-justify"></i>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="fs-4">@task.ProjectNavigation.Name</div>
+                                            <div class="card-text">
+                                                @task.Descrption.ToString().Substring(0, 25)...
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Created by:
+                                                        @task.CreatedByNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.CreatedByNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                                <p class="card-text mt-2">
+                                                    <small class="text-muted">
+                                                        Assigned To:
+                                                        @task.AssignedToNavigation.Name
+                                                        <br>
+                                                        <strong>
+                                                            @task.AssignedToNavigation.RoleNavigation.Role1
+                                                        </strong>
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                    <div class="card-footer w-100"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
